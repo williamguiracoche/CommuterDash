@@ -11,7 +11,11 @@ dotenv.load_dotenv('api_key.env') # loads .env from root directory
 # and dotenv installed from pypi. Get API key from http://datamine.mta.info/user
 api_key = os.environ['API_KEY']
 
-train_id = 21 #Hard coded for now. 
+trains_to_id = yaml.load(open('trains_to_id.yaml'))
+line = raw_input("Which train line do you want?\n")
+print 'The line id number is: ' + str(trains_to_id[line]) + '\n'
+
+train_id = trains_to_id['D'] #Hard coded for now because the rest of the code only works with the D line.
 
 # Requests subway status data feed from City of New York MTA API
 response = requests.get('http://datamine.mta.info/mta_esi.php?key={}&feed_id={}'.format(api_key,train_id))
