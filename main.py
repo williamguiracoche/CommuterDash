@@ -4,6 +4,8 @@ import time # imports module for Epoch/GMT time conversion
 import os # imports package for dotenv
 import dotenv
 import yaml
+import csv
+import urllib2
 
 dotenv.load_dotenv('api_key.env') # loads .env from root directory
 
@@ -12,8 +14,17 @@ dotenv.load_dotenv('api_key.env') # loads .env from root directory
 api_key = os.environ['API_KEY']
 
 trains_to_id = yaml.load(open('trains_to_id.yaml'))
-line = raw_input("Which train line do you want?\n")
-print 'The line id number is: ' + str(trains_to_id[line]) + '\n'
+#This an get station id from command line input:
+#line = raw_input("Which train line do you want?\n")
+#print 'The line id number is: ' + str(trains_to_id[line]) + '\n'
+
+#CSV file reader
+stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
+response = urllib2.urlopen(stations_url)
+stations_csv = csv.reader(response)
+
+for row in stations_csv:
+    print row
 
 train_id = trains_to_id['D'] #Hard coded for now because the rest of the code only works with the D line.
 
