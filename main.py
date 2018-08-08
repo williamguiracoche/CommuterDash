@@ -14,17 +14,21 @@ dotenv.load_dotenv('api_key.env') # loads .env from root directory
 api_key = os.environ['API_KEY']
 
 trains_to_id = yaml.load(open('trains_to_id.yaml'))
-#This an get station id from command line input:
-#line = raw_input("Which train line do you want?\n")
+#This gets station id from command line input:
+line = raw_input("Which train line do you want?\n")
 #print 'The line id number is: ' + str(trains_to_id[line]) + '\n'
 
-#CSV file reader
+# CSV file reader
 stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
 response = urllib2.urlopen(stations_url)
 stations_csv = csv.reader(response)
 
+next(stations_csv) #Skips the first line in the csv file because it's the header.
+
+print 'The stations in line ' + line + ' are:\n'
+# Row 7 lists the lines that pass through the station. Row 5 lists the station names.
 for row in stations_csv:
-    print row
+    if line in (row[7]): print (row[5])
 
 train_id = trains_to_id['D'] #Hard coded for now because the rest of the code only works with the D line.
 
@@ -79,13 +83,14 @@ time_until_train = int(((nearest_arrival_time - current_time) / 60))
 
 # This final part of the code checks the time to arrival and prints a few
 # different messages depending on the circumstance
-print "For Southbound train at Broadway-Lafayette"
-if time_until_train > 3:
-    print "Current time: "+time.strftime("%I:%M %p")
-    print "Minutes to next: "+str(time_until_train)
-    print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
-elif time_until_train <= 0:
-    print "Missed it. Minutes to next: "+str(time_until_train)
-    print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(second_arrival_time))
-else:
-    print "You have "+str(time_until_train)+" minutes to get home."
+
+# print "For Southbound train at Broadway-Lafayette"
+# if time_until_train > 3:
+#     print "Current time: "+time.strftime("%I:%M %p")
+#     print "Minutes to next: "+str(time_until_train)
+#     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
+# elif time_until_train <= 0:
+#     print "Missed it. Minutes to next: "+str(time_until_train)
+#     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(second_arrival_time))
+# else:
+#     print "You have "+str(time_until_train)+" minutes to get home."
