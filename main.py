@@ -17,20 +17,35 @@ trains_to_id = yaml.load(open('trains_to_id.yaml'))
 #This gets station id from command line input:
 line = raw_input("Which train line do you want?\n")
 #print 'The line id number is: ' + str(trains_to_id[line]) + '\n'
+#train_id = trains_to_id['D'] #Hard coded for now because the rest of the code only works with the D line.
+train_id = trains_to_id[line]
 
 # CSV file reader
 stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
-response = urllib2.urlopen(stations_url)
-stations_csv = csv.reader(response)
+stations_response = urllib2.urlopen(stations_url)
+stations_csv = csv.reader(stations_response)
+print stations_csv
 
 next(stations_csv) #Skips the first line in the csv file because it's the header.
 
 print 'The stations in line ' + line + ' are:\n'
-# Row 7 lists the lines that pass through the station. Row 5 lists the station names.
+# Prints all station names belonging to the selected line
 for row in stations_csv:
-    if line in (row[7]): print (row[5])
+    if line in (row[7]): # row[7] = Lines passing htrough station
+        print (row[5])   # row[5] = Station name
 
-train_id = trains_to_id['D'] #Hard coded for now because the rest of the code only works with the D line.
+# The following lines of code are necessary to go through the csv file again.
+# I'm pretty sure there is a better way to do this with a seek or something
+# similar. This is a temporary solution.
+stations_response = urllib2.urlopen(stations_url)
+stations_csv = csv.reader(stations_response)
+next(stations_csv) #Skips the first line in the csv file because it's the header.
+
+station_select = raw_input("Which station do you want?\n")
+for row in stations_csv:
+    if line in (row[7]) and station_select == row[5]:
+        gtfs_id = row[2]
+        print gtfs_id
 
 # Requests subway status data feed from City of New York MTA API
 response = requests.get('http://datamine.mta.info/mta_esi.php?key={}&feed_id={}'.format(api_key,train_id))
@@ -74,12 +89,12 @@ station_time_lookup(realtime_data, 'D21S')
 collected_times.sort()
 
 # Pop off the earliest and second earliest arrival times from the list
-nearest_arrival_time = collected_times[0]
-second_arrival_time = collected_times[1]
+#nearest_arrival_time = collected_times[0]
+#second_arrival_time = collected_times[1]
 
 # Grab the current time so that you can find out the minutes to arrival
-current_time = int(time.time())
-time_until_train = int(((nearest_arrival_time - current_time) / 60))
+#current_time = int(time.time())
+#time_until_train = int(((nearest_arrival_time - current_time) / 60))
 
 # This final part of the code checks the time to arrival and prints a few
 # different messages depending on the circumstance
