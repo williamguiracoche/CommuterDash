@@ -24,7 +24,7 @@ train_id = trains_to_id[line]
 stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
 stations_response = urllib2.urlopen(stations_url)
 stations_csv = csv.reader(stations_response)
-print stations_csv
+#print stations_csv
 
 next(stations_csv) #Skips the first line in the csv file because it's the header.
 
@@ -46,6 +46,13 @@ for row in stations_csv:
     if line in (row[7]) and station_select == row[5]:
         gtfs_id = row[2]
         print gtfs_id
+
+direction_select = raw_input("'Uptown' or 'Downtown'?\n")
+if direction_select == 'Uptown':
+    stop_id = gtfs_id + 'N'
+if direction_select == 'Downtown':
+    stop_id = gtfs_id + 'S'
+print stop_id
 
 # Requests subway status data feed from City of New York MTA API
 response = requests.get('http://datamine.mta.info/mta_esi.php?key={}&feed_id={}'.format(api_key,train_id))
