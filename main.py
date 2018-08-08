@@ -89,30 +89,31 @@ def station_time_lookup(train_data, station):
                         collected_times.append(unique_time)
 
 # Run the above function for the station ID for Broadway-Lafayette
-station_time_lookup(realtime_data, 'D21S')
+station_time_lookup(realtime_data, stop_id)
 
 # Sort the collected times list in chronological order (the times from the data
 # feed are in Epoch time format)
 collected_times.sort()
 
 # Pop off the earliest and second earliest arrival times from the list
-#nearest_arrival_time = collected_times[0]
-#second_arrival_time = collected_times[1]
+nearest_arrival_time = collected_times[0]
+second_arrival_time = collected_times[1]
 
 # Grab the current time so that you can find out the minutes to arrival
-#current_time = int(time.time())
-#time_until_train = int(((nearest_arrival_time - current_time) / 60))
+current_time = int(time.time())
+time_until_train = int(((nearest_arrival_time - current_time) / 60))
 
 # This final part of the code checks the time to arrival and prints a few
 # different messages depending on the circumstance
 
-# print "For Southbound train at Broadway-Lafayette"
-# if time_until_train > 3:
-#     print "Current time: "+time.strftime("%I:%M %p")
-#     print "Minutes to next: "+str(time_until_train)
-#     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
-# elif time_until_train <= 0:
-#     print "Missed it. Minutes to next: "+str(time_until_train)
-#     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(second_arrival_time))
-# else:
-#     print "You have "+str(time_until_train)+" minutes to get home."
+print "\nFor " + station_select
+if time_until_train > 3:
+    print "Current time: "+time.strftime("%I:%M %p")
+    print "Minutes to next: "+str(time_until_train)
+    print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
+elif time_until_train <= 0:
+    print "Missed it. Minutes to next: "+str(time_until_train)
+    print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(second_arrival_time))
+else:
+    print "You have "+str(time_until_train)+" minutes to get home."
+    print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
