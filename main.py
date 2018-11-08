@@ -6,6 +6,9 @@ import dotenv
 import yaml
 import csv
 import urllib2
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+
+app = Flask(__name__)
 
 dotenv.load_dotenv('api_key.env') # loads .env from root directory
 
@@ -117,3 +120,13 @@ elif time_until_train <= 0:
 else:
     print "You have "+str(time_until_train)+" minutes to get home."
     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
+
+
+@app.route('/')
+@app.route('/hi')
+def main():
+    return 'This is the main page now'
+
+if __name__ == '__main__':
+    app.debug = True
+    app.run(host='0.0.0.0', port=5000)
