@@ -16,9 +16,20 @@ dotenv.load_dotenv('api_key.env') # loads .env from root directory
 # and dotenv installed from pypi. Get API key from http://datamine.mta.info/user
 api_key = os.environ['API_KEY']
 
-trains_to_id = yaml.load(open('trains_to_id.yaml'))
+
+@app.route('/')
+def main():
+    return 'This is the main page'
+
+@app.route('/line')
+def chooseLine():
+    trains_to_id = yaml.load(open('trains_to_id.yaml'))
+    return render_template('line.html', lines=trains_to_id)
+
+
 #This gets station id from command line input:
-line = raw_input("Which train line do you want?\n")
+#line = raw_input("Which train line do you want?\n")
+line = 'N'
 #print 'The line id number is: ' + str(trains_to_id[line]) + '\n'
 #train_id = trains_to_id['D'] #Hard coded for now because the rest of the code only works with the D line.
 train_id = trains_to_id[line]
@@ -44,13 +55,15 @@ stations_response = urllib2.urlopen(stations_url)
 stations_csv = csv.reader(stations_response)
 next(stations_csv) #Skips the first line in the csv file because it's the header.
 
-station_select = raw_input("Which station do you want?\n")
+# station_select = raw_input("Which station do you want?\n")
+station_select = 'Queensboro Plaza'
 for row in stations_csv:
     if line in (row[7]) and station_select == row[5]:
         gtfs_id = row[2]
         print gtfs_id
 
-direction_select = raw_input("'Uptown' or 'Downtown'?\n")
+#direction_select = raw_input("'Uptown' or 'Downtown'?\n")
+direction_select = 'Uptown'
 if direction_select == 'Uptown':
     stop_id = gtfs_id + 'N'
 if direction_select == 'Downtown':
@@ -121,14 +134,6 @@ else:
     print "You have "+str(time_until_train)+" minutes to get home."
     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
 
-
-@app.route('/')
-def main():
-    return 'This is the main page'
-    
-@app.route('/line')
-def main():
-    return 'Choose your line here'
 
 if __name__ == '__main__':
     app.debug = True
