@@ -6,13 +6,13 @@
 	</head>
 
 	<body>
-		<form action="#" method = "post">
 			{% for line in lines %}
 					<div class="line-choice">
-						<input type="radio" name="line" value={{line}}>{{line}}
+						<a href="{{url_for('selectStation', line=line)}}">
+						{{line.lower() + '.svg' }}
+						</a>
 					</div>
 			{% endfor %}
 			<button type="submit" class="button">Choose!</button>
-		</form>
 	</body>
 </html>

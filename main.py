@@ -22,16 +22,20 @@ def main():
     return 'This is the main page'
 
 @app.route('/line-select', methods = ['GET','POST'])
-def chooseLine():
+def selectLine():
     trains_to_id = yaml.load(open('trains_to_id.yaml'))
-    if request.method == 'POST':
-        line = request.form['line']
-        train_id = trains_to_id[line]
-        print 'TRAIN LINE IS: ' + line + '\n'
-        print 'TRAIN ID IS: ' +str(train_id)
-        return redirect('/')
-    else:
-        return render_template('line.html', lines=trains_to_id)
+    # if request.method == 'POST':
+    #     line = request.form['line']
+    #     train_id = trains_to_id[line]
+    #     print 'TRAIN LINE IS: ' + line + '\n'
+    #     print 'TRAIN ID IS: ' +str(train_id)
+    #     return redirect('/')
+    # else:
+    return render_template('line.html', lines=trains_to_id)
+
+@app.route('/<line>/station-select')
+def selectStation(line):
+    return 'Here is where you select the station in line %s' %line
 
 
 #This gets station id from command line input:
