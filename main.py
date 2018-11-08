@@ -123,9 +123,12 @@ else:
 
 
 @app.route('/')
-@app.route('/hi')
 def main():
-    return 'This is the main page now'
+    return 'This is the main page'
+    
+@app.route('/line')
+def main():
+    return 'Choose your line here'
 
 if __name__ == '__main__':
     app.debug = True
