@@ -21,10 +21,17 @@ api_key = os.environ['API_KEY']
 def main():
     return 'This is the main page'
 
-@app.route('/line')
+@app.route('/line-select', methods = ['GET','POST'])
 def chooseLine():
     trains_to_id = yaml.load(open('trains_to_id.yaml'))
-    return render_template('line.html', lines=trains_to_id)
+    if request.method == 'POST':
+        line = request.form['line']
+        train_id = trains_to_id[line]
+        print 'TRAIN LINE IS: ' + line + '\n'
+        print 'TRAIN ID IS: ' +str(train_id)
+        return redirect('/')
+    else:
+        return render_template('line.html', lines=trains_to_id)
 
 
 #This gets station id from command line input:
@@ -32,7 +39,7 @@ def chooseLine():
 line = 'N'
 #print 'The line id number is: ' + str(trains_to_id[line]) + '\n'
 #train_id = trains_to_id['D'] #Hard coded for now because the rest of the code only works with the D line.
-train_id = trains_to_id[line]
+train_id = '16'#trains_to_id[line]
 
 # CSV file reader
 stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'

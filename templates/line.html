@@ -6,10 +6,13 @@
 	</head>
 
 	<body>
-		{% for line in lines %}
-				<div class="line-choice">
-					<input type="radio" name="line" value={{line}}>{{line}}
-				</div>
-		{% endfor %}
+		<form action="#" method = "post">
+			{% for line in lines %}
+					<div class="line-choice">
+						<input type="radio" name="line" value={{line}}>{{line}}
+					</div>
+			{% endfor %}
+			<button type="submit" class="button">Choose!</button>
+		</form>
 	</body>
 </html>
