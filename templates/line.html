@@ -6,13 +6,12 @@
 	</head>
 
 	<body>
-			{% for line in lines %}
-					<div class="line-choice">
-						<a href="{{url_for('selectStation', line=line)}}">
-						{{line.lower() + '.svg' }}
-						</a>
-					</div>
-			{% endfor %}
-			<button type="submit" class="button">Choose!</button>
+		{% for line in lines %}
+				<div class="line-choice">
+					<a href="{{url_for('selectStation', line=line)}}">
+					<img src="static/svg/{{line.lower()+'.svg'}}" alt='{{line}}' style="width:45px;">
+					</a>
+				</div>
+		{% endfor %}
 	</body>
 </html>
