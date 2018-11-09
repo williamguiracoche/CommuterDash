@@ -21,7 +21,7 @@ api_key = os.environ['API_KEY']
 def main():
     return 'This is the main page'
 
-@app.route('/line-select', methods = ['GET','POST'])
+@app.route('/line-select')
 def selectLine():
     trains_to_id = yaml.load(open('trains_to_id.yaml'))
     # if request.method == 'POST':
@@ -33,9 +33,45 @@ def selectLine():
     # else:
     return render_template('line.html', lines=trains_to_id)
 
-@app.route('/<line>/station-select')
+@app.route('/<line>/station-select', methods = ['GET','POST'])
 def selectStation(line):
-    return 'Here is where you select the station in line %s' %line
+    # CSV file reader
+    stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
+    stations_response = urllib2.urlopen(stations_url)
+    stations_csv = csv.reader(stations_response)
+    next(stations_csv) #Skips the first line in the csv file because it's the header.
+    station_names = []
+
+    for row in stations_csv:
+        if line in (row[7]): # row[7] = Lines passing through station
+            station_names.append(row[5])   # row[5] = Station name
+            print 'STATIONS ARE \n'
+    print station_names
+
+    # The following lines of code are necessary to go through the csv file again.
+    # I'm pretty sure there is a better way to do this with a seek or something
+    # similar. This is a temporary solution.
+    stations_response = urllib2.urlopen(stations_url)
+    stations_csv = csv.reader(stations_response)
+    next(stations_csv) #Skips the first line in the csv file because it's the header.
+
+    gtfs_id = ''
+    # station_select = raw_input("Which station do you want?\n")
+    station_select = 'Queensboro Plaza'
+    for row in stations_csv:
+        if line in (row[7]) and station_select == row[5]:
+            gtfs_id = row[2]
+            print gtfs_id
+
+    #direction_select = raw_input("'Uptown' or 'Downtown'?\n")
+    direction_select = 'Uptown'
+    if direction_select == 'Uptown':
+        stop_id = gtfs_id + 'N'
+    if direction_select == 'Downtown':
+        stop_id = gtfs_id + 'S'
+    print stop_id
+
+    return render_template('stationSelect.html', stations = station_names)
 
 
 # #This gets station id from command line input:
