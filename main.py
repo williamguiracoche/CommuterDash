@@ -15,7 +15,7 @@ dotenv.load_dotenv('api_key.env') # loads .env from root directory
 # The root directory requires a .env file with API_KEY assigned/defined within
 # and dotenv installed from pypi. Get API key from http://datamine.mta.info/user
 api_key = os.environ['API_KEY']
-
+stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
 
 @app.route('/')
 def main():
@@ -35,43 +35,46 @@ def selectLine():
 
 @app.route('/<line>/station-select', methods = ['GET','POST'])
 def selectStation(line):
-    # CSV file reader
-    stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
-    stations_response = urllib2.urlopen(stations_url)
-    stations_csv = csv.reader(stations_response)
-    next(stations_csv) #Skips the first line in the csv file because it's the header.
-    station_names = []
 
-    for row in stations_csv:
-        if line in (row[7]): # row[7] = Lines passing through station
-            station_names.append(row[5])   # row[5] = Station name
-            print 'STATIONS ARE \n'
-    print station_names
+    if request.method == 'GET':
+        # CSV file reader
+        stations_response = urllib2.urlopen(stations_url)
+        stations_csv = csv.reader(stations_response)
+        next(stations_csv) #Skips the first line in the csv file because it's the header.
+        station_names = []
 
-    # The following lines of code are necessary to go through the csv file again.
-    # I'm pretty sure there is a better way to do this with a seek or something
-    # similar. This is a temporary solution.
-    stations_response = urllib2.urlopen(stations_url)
-    stations_csv = csv.reader(stations_response)
-    next(stations_csv) #Skips the first line in the csv file because it's the header.
+        for row in stations_csv:
+            if line in (row[7]): # row[7] = Lines passing through station
+                station_names.append(row[5])   # row[5] = Station name
 
-    gtfs_id = ''
-    # station_select = raw_input("Which station do you want?\n")
-    station_select = 'Queensboro Plaza'
-    for row in stations_csv:
-        if line in (row[7]) and station_select == row[5]:
-            gtfs_id = row[2]
-            print gtfs_id
+        return render_template('stationSelect.html', stations = station_names)
 
-    #direction_select = raw_input("'Uptown' or 'Downtown'?\n")
-    direction_select = 'Uptown'
-    if direction_select == 'Uptown':
-        stop_id = gtfs_id + 'N'
-    if direction_select == 'Downtown':
-        stop_id = gtfs_id + 'S'
-    print stop_id
+    else:
+        direction = request.form['direction']
+        station = request.form['station']
 
-    return render_template('stationSelect.html', stations = station_names)
+        stations_response = urllib2.urlopen(stations_url)
+        stations_csv = csv.reader(stations_response)
+        next(stations_csv) #Skips the first line in the csv file because it's the header.
+
+        gtfs_id = ''
+
+
+        for row in stations_csv:
+            if line in (row[7]) and station == row[5]:
+                gtfs_id = row[2]
+
+        if direction == 'uptown':
+            stop_id = gtfs_id + 'N'
+        else:
+            stop_id = gtfs_id + 'S'
+
+        print 'Line:'+line
+        print 'Station: '+station
+        print 'gtfs_id is: '+gtfs_id
+        print 'stop_id: '+stop_id
+
+    return 'Your gtfs_id is %s and your stop_id is %s' % (gtfs_id, stop_id)
 
 
 # #This gets station id from command line input:
