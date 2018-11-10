@@ -118,7 +118,6 @@ def selectStation(line):
         # Sort the collected times list in chronological order (the times from the data
         # feed are in Epoch time format)
         collected_times.sort()
-        print collected_times
 
         # # Pop off the earliest and second earliest arrival times from the list
         # nearest_arrival_time = collected_times[0]
@@ -143,11 +142,11 @@ def selectStation(line):
         #     print "You have "+str(time_until_train)+" minutes to get home."
         #     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
 
-    return 'Your gtfs_id is %s and your stop_id is %s' % (gtfs_id, stop_id)
+        return redirect(url_for('timesDisplay'))
 
-
-
-
+@app.route('/times-display')
+def timesDisplay():
+    return 'Display the times here'
 
 if __name__ == '__main__':
     app.debug = True
