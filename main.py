@@ -18,6 +18,9 @@ dotenv.load_dotenv('api_key.env') # loads .env from root directory
 api_key = os.environ['API_KEY']
 trains_to_id = yaml.load(open('trains_to_id.yaml'))
 stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
+# Because the data feed includes multiple arrival times for a given station
+# a global list needs to be created to collect the various times
+collected_times = []
 
 @app.route('/')
 def main():
@@ -89,10 +92,6 @@ def selectStation(line):
 
         subway_feed = protobuf_to_dict(feed) # subway_feed is a dictionary
         realtime_data = subway_feed['entity'] # train_data is a list
-
-        # Because the data feed includes multiple arrival times for a given station
-        # a global list needs to be created to collect the various times
-        collected_times = []
 
         # This function takes a converted MTA data feed and a specific station ID and
         # loops through various nested dictionaries and lists to (1) filter out active
