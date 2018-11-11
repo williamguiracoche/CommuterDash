@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head
+	<meta charset="UTF-8">
+	<title>Time Display</title>
+	</head>
+
+	<body>
+		<form action="#" method = "post">
+            <div class='direction-select'>
+                Choose Direction:
+                <input type="radio" name="direction" value='uptown'> Uptown
+                <input type="radio" name="direction" value='downtown'> Downtown
+            </div>
+
+            <div class='station-select'>
+                Choose Station:
+    			{% for station in stations %}
+    					<div class="station-choice">
+    						<input type="radio" name="station" value="{{station}}">{{station}}
+    					</div>
+    			{% endfor %}
+            </div>
+			<button type="submit" class="button">Choose!</button>
+
+		</form>
+	</body>
+</html>
