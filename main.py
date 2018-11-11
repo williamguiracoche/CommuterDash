@@ -6,6 +6,7 @@ import dotenv
 import yaml
 import csv
 import urllib2
+import operator
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from protobuf_to_dict import protobuf_to_dict
 
@@ -21,6 +22,11 @@ stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
 # Because the data feed includes multiple arrival times for a given station
 # a global list needs to be created to collect the various times
 collected_times = []
+
+def timeUntil(arrival_time):
+    current_time = int(time.time())
+    time_until_train = int(((arrival_time - current_time) / 60))
+    return time_until_train
 
 @app.route('/')
 def main():
@@ -117,35 +123,53 @@ def selectStation(line):
 
         # Sort the collected times list in chronological order (the times from the data
         # feed are in Epoch time format)
-        collected_times.sort()
-
-        # # Pop off the earliest and second earliest arrival times from the list
-        # nearest_arrival_time = collected_times[0]
-        # second_arrival_time = collected_times[1]
-        #
-        # # Grab the current time so that you can find out the minutes to arrival
-        # current_time = int(time.time())
-        # time_until_train = int(((nearest_arrival_time - current_time) / 60))
-        #
-        # # This final part of the code checks the time to arrival and prints a few
-        # # different messages depending on the circumstance
-        #
-        # print "\nFor " + station
-        # if time_until_train > 3:
-        #     print "Current time: "+time.strftime("%I:%M %p")
-        #     print "Minutes to next: "+str(time_until_train)
-        #     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
-        # elif time_until_train <= 0:
-        #     print "Missed it. Minutes to next: "+str(time_until_train)
-        #     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(second_arrival_time))
-        # else:
-        #     print "You have "+str(time_until_train)+" minutes to get home."
-        #     print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(nearest_arrival_time))
-
+        collected_times.sort(key=operator.itemgetter(1))
         return redirect(url_for('timesDisplay'))
 
 @app.route('/times-display')
 def timesDisplay():
+    # Pop off the earliest  arrival times from the list
+    first_arrival_time_data = collected_times[0]
+    second_arrival_time_data = collected_times[1]
+    third_arrival_time_data = collected_times[2]
+
+    first_line = first_arrival_time_data[0]
+    first_time = first_arrival_time_data[1]
+    second_line = second_arrival_time_data[0]
+    second_time = second_arrival_time_data[1]
+    third_line = third_arrival_time_data[0]
+    third_time = third_arrival_time_data[1]
+
+    time_until_first = timeUntil(first_time)
+    time_until_second = timeUntil(second_time)
+    time_until_third = timeUntil(third_time)
+
+    print collected_times
+
+    print first_line
+    print time_until_first
+
+    print second_line
+    print time_until_second
+
+    print third_line
+    print time_until_third
+
+
+    # This final part of the code checks the time to arrival and prints a few
+    # different messages depending on the circumstance
+
+    if time_until_first > 3:
+        print "Current time: "+time.strftime("%I:%M %p")
+        print "Minutes to next: "+str(time_until_first)
+        print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(first_time))
+    elif time_until_first <= 0:
+        print "Missed it. Minutes to next: "+str(time_until_first)
+        print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(second_time))
+    else:
+        print "You have "+str(time_until_first)+" minutes to get home."
+        print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(first_arrival_time))
+
     return 'Display the times here'
 
 if __name__ == '__main__':
