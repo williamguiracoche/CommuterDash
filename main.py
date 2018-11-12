@@ -8,6 +8,8 @@ import csv
 import urllib2
 import operator
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import session as login_session
+import random, string
 from protobuf_to_dict import protobuf_to_dict
 
 app = Flask(__name__)
@@ -27,6 +29,14 @@ def timeUntil(arrival_time):
     current_time = int(time.time())
     time_until_train = int(((arrival_time - current_time) / 60))
     return time_until_train
+
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(string.ascii_uppercase + string.digits)
+                    for x in xrange(32))
+    login_session['state'] = state
+    return "The current session state is %s" % login_session['state']
+
 
 @app.route('/')
 def main():
@@ -182,9 +192,9 @@ def timesDisplay():
     else:
         print "You have "+str(time_until_first)+" minutes to get home."
         print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(first_time))
-
     return output
 
 if __name__ == '__main__':
+    app.secret_key = 'temporary_secret_key'
     app.debug = True
-    app.run(host='127.0.0.1', port=5005)
+    app.run(host='0.0.0.0', port=5000)
