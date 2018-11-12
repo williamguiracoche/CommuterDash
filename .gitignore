@@ -1,2 +1,4 @@
-api_key.env
+*.env
 scratch.py
+*.pyc
+
