@@ -45,7 +45,7 @@ def selectLine():
 
 @app.route('/<line>/station-select', methods = ['GET','POST'])
 def selectStation(line):
-
+    global collected_times
     if request.method == 'GET':
         # CSV file reader
         stations_response = urllib2.urlopen(stations_url)
@@ -103,7 +103,9 @@ def selectStation(line):
         # loops through various nested dictionaries and lists to (1) filter out active
         # trains, (2) search for the given station ID, and (3) append the arrival time
         # of any instance of the station ID to the collected_times list
-        def station_time_lookup(train_data, stop):
+        def station_time_lookup(train_data, stop, collected_times):
+            print 'Clearing collected_times...'
+            collected_times = []
             for trains in train_data: # trains are dictionaries
                 if trains.get('trip_update', False) != False:
                     unique_train_schedule = trains['trip_update'] # train_schedule is a dictionary with trip and stop_time_update
@@ -116,10 +118,14 @@ def selectStation(line):
                             unique_time = time_data['time']
                             if unique_time != None:
                                 route_time = (route_id, unique_time)
+                                print 'appropriate time found!'
                                 collected_times.append(route_time)
-
+                                print collected_times
+            return collected_times
         # Run the above function for the station ID for Broadway-Lafayette
-        station_time_lookup(realtime_data, stop_id)
+        collected_times = station_time_lookup(realtime_data, stop_id, collected_times)
+        print 'collected_times master list'
+        print collected_times
 
         # Sort the collected times list in chronological order (the times from the data
         # feed are in Epoch time format)
@@ -128,6 +134,9 @@ def selectStation(line):
 
 @app.route('/times-display')
 def timesDisplay():
+    global collected_times
+    print '[display]: collected_times master list'
+    print collected_times
     # Pop off the earliest  arrival times from the list
     first_arrival_time_data = collected_times[0]
     second_arrival_time_data = collected_times[1]
@@ -155,6 +164,10 @@ def timesDisplay():
     print third_line
     print time_until_third
 
+    output = ''
+    output += '%s train arriving in %d minutes<br>' % (first_line, time_until_first)
+    output += '%s train arriving in %d minutes<br>' % (second_line, time_until_second)
+    output += '%s train arriving in %d minutes<br>' % (third_line, time_until_third)
 
     # This final part of the code checks the time to arrival and prints a few
     # different messages depending on the circumstance
@@ -168,10 +181,10 @@ def timesDisplay():
         print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(second_time))
     else:
         print "You have "+str(time_until_first)+" minutes to get home."
-        print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(first_arrival_time))
+        print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(first_time))
 
-    return 'Display the times here'
+    return output
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='127.0.0.1', port=5005)
