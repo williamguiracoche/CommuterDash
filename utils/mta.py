@@ -39,20 +39,6 @@ def get_station_names_from_line(line):
 def get_sorted_times_from_station(direction, station, line):
     stations_csv = get_stations_csv()
     gtfs_id = ''
-    # for row in stations_csv:
-    #     line_names = get_line_array_from_lines(row[7])
-    #     print line_names
-    #     for line_name in line_names:
-    #         if line == line_name and station in row[5]:
-    #             print 'Line: '
-    #             print line
-    #             print 'Line name: '
-    #             print line_name
-    #             print 'Station name: '
-    #             print station
-    #             print 'Row 5: '
-    #             print row[5]
-    #             gtfs_id = row[2]
 
     for row in stations_csv:
         if line in (row[7]) and station == row[5]:
