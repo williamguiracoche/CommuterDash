@@ -1,4 +1,4 @@
 *.env
 scratch.py
 *.pyc
-
+client_secrets.json
