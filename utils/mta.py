@@ -8,7 +8,7 @@ import requests
 import operator
 from protobuf_to_dict import protobuf_to_dict
 
-dotenv.load_dotenv('api_key.env') # loads .env from root directory
+dotenv.load_dotenv('utils/api_key.env') # loads .env from root directory
 
 # The root directory requires a .env file with API_KEY assigned/defined within
 # and dotenv installed from pypi. Get API key from http://datamine.mta.info/user
@@ -27,14 +27,33 @@ def get_stations_csv():
     next(stations_csv)
     return stations_csv
 
+def get_line_array_from_lines(lines):
+    line_array = lines.split()
+    return line_array
+
 def get_station_names_from_line(line):
     stations_csv = get_stations_csv()
-    station_names = [row[5] for row in stations_csv if line in row[7]] 
+    station_names = [row[5] for row in stations_csv if line in get_line_array_from_lines(row[7])]
     return station_names
 
 def get_sorted_times_from_station(direction, station, line):
     stations_csv = get_stations_csv()
     gtfs_id = ''
+    # for row in stations_csv:
+    #     line_names = get_line_array_from_lines(row[7])
+    #     print line_names
+    #     for line_name in line_names:
+    #         if line == line_name and station in row[5]:
+    #             print 'Line: '
+    #             print line
+    #             print 'Line name: '
+    #             print line_name
+    #             print 'Station name: '
+    #             print station
+    #             print 'Row 5: '
+    #             print row[5]
+    #             gtfs_id = row[2]
+
     for row in stations_csv:
         if line in (row[7]) and station == row[5]:
             gtfs_id = row[2]
@@ -92,5 +111,5 @@ def station_time_lookup(train_data, stop):
                         route_time = (route_id, unique_time)
                         collected_times.append(route_time)
                         print 'route time added:', route_time
-                        
+
     return collected_times
