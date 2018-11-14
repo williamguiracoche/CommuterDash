@@ -17,10 +17,11 @@ import requests
 
 app = Flask(__name__)
 
+collected_times = []
+TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Commuter Dash"
 
-dotenv.load_dotenv('api_key.env') # loads .env from root directory
 
 app = Flask(__name__)
 
