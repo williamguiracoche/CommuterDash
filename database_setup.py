@@ -15,10 +15,10 @@ class User(Base):
     picture = Column(String(250))
 
 
-class SavedStations(Base):
+class SavedStation(Base):
     __tablename__ = 'restaurant'
 
-    gtfs_id = Column(Integer, primary_key=True)
+    gtfs_id = Column(String(3), primary_key=True)
     order = Column(Integer)
     user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
     user = relationship(User)

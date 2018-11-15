@@ -36,6 +36,14 @@ def get_station_names_from_line(line):
     station_names = [row[5] for row in stations_csv if line in get_line_array_from_lines(row[7])]
     return station_names
 
+def get_station_name_from_gtfs_id(gtfs_id):
+    stations_csv = get_stations_csv()
+    station_name = ''
+    for row in stations_csv:
+        if gtfs_id in row[2]: station_name = row[5]
+        return station_names
+    return 'Station name not found from GTFS Stop ID'
+
 def get_sorted_times_from_station(direction, station, line):
     stations_csv = get_stations_csv()
     gtfs_id = ''
