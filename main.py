@@ -152,7 +152,10 @@ def gdisconnect():
 
 @app.route('/')
 def main():
-    return 'This is the main page. You may want to visit /line-select'
+    logged_in = False
+    if 'username' in login_session:
+        logged_in = True
+    return render_template('main.html', logged_in = logged_in)
 
 @app.route('/line-select')
 def selectLine():
