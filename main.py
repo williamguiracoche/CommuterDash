@@ -15,6 +15,10 @@ import json
 from flask import make_response
 import requests
 
+from sqlalchemy import create_engine, asc
+from sqlalchemy.orm import sessionmaker
+from database_setup import Base, Restaurant, MenuItem, User
+
 app = Flask(__name__)
 
 collected_times = []
