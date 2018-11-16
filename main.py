@@ -196,18 +196,15 @@ def selectLine():
 def selectStation(line):
     global collected_times
     if request.method == 'GET':
-        station_names = mta.get_station_names_from_line(line)
-        return render_template('stationSelect.html', stations = station_names)
+        gtfs_and_names = mta.get_gtfs_and_station_name_from_line(line)
+        return render_template('stationSelect.html', gtfs_and_names= gtfs_and_names)
 
     elif request.method == 'POST':
         direction = request.form['direction']
-        station = request.form['station']
-        print 'direction',direction
-        print 'station',station
-        print 'line',line
-        collected_times = mta.get_sorted_times_from_station(direction, station, line)
-        print 'updated master list', collected_times
-
+        gtfs_id = request.form['gtfs_id']
+        station_name = mta.get_station_name_from_gtfs_id(gtfs_id)
+        print station_name
+        collected_times = mta.get_sorted_times_from_station(direction, station_name, line)
         return redirect(url_for('timesDisplay'))
 
 @app.route('/times-display')
