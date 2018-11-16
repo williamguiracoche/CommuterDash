@@ -184,9 +184,12 @@ def gdisconnect():
 @app.route('/')
 def main():
     logged_in = False
+    stations = []
     if 'username' in login_session:
         logged_in = True
-    return render_template('main.html', logged_in = logged_in)
+        user_id = login_session['user_id']
+        stations = session.query(SavedStation).filter_by(user_id=user_id)
+    return render_template('main.html', logged_in = logged_in, stations = stations)
 
 @app.route('/line-select')
 def selectLine():

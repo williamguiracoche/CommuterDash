@@ -12,6 +12,14 @@
 		<a href="{{url_for('showLogin')}}">Click here to log in!
 		{% endif %}
 		<br>
-		<a href="{{url_for('selectLine')}}">Click here to select your line!
+		<a href="{{url_for('selectLine')}}">Click here to select your line!</a>
+
+		<div class="station_display">
+			{% for station in stations%}
+				Station GTFS Id you saved =
+				{{station.gtfs_id}}
+				<br>
+			{% endfor%}
+		</div>
 	</body>
 </html>
