@@ -17,7 +17,7 @@ import requests
 
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, User, SavedStations
+from database_setup import Base, User, SavedStation
 
 app = Flask(__name__)
 
