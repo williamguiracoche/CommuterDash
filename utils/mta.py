@@ -37,7 +37,7 @@ def get_station_names_from_line(line):
     station_names = [row[5] for row in stations_csv if line in get_line_array_from_lines(row[7])]
     return station_names
 
-def get_station_name_and_gtfs_from_line(line):
+def get_gtfs_and_station_name_from_line(line):
     stations_csv = get_stations_csv()
     station_info = []
     for row in stations_csv:
