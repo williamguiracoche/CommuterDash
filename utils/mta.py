@@ -31,10 +31,21 @@ def get_line_array_from_lines(lines):
     line_array = lines.split()
     return line_array
 
+# Delete this if you replace it with get_station_name_and_gtfs_from_line()
 def get_station_names_from_line(line):
     stations_csv = get_stations_csv()
     station_names = [row[5] for row in stations_csv if line in get_line_array_from_lines(row[7])]
     return station_names
+
+def get_station_name_and_gtfs_from_line(line):
+    stations_csv = get_stations_csv()
+    station_info = []
+    for row in stations_csv:
+        if line in get_line_array_from_lines(row[7]):
+            gtfs_id = row[2]
+            station_names = row[5]
+            station_info = [(gtfs_id, station_names)]
+    return station_info
 
 def get_station_name_from_gtfs_id(gtfs_id):
     stations_csv = get_stations_csv()
