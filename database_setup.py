@@ -16,7 +16,7 @@ class User(Base):
 
 
 class SavedStation(Base):
-    __tablename__ = 'restaurant'
+    __tablename__ = 'station'
 
     gtfs_id = Column(String(3), primary_key=True)
     order = Column(Integer)
