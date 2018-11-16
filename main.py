@@ -26,6 +26,12 @@ TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Commuter Dash"
 
+# Connect to Database and create database session
+engine = create_engine('sqlite:///savedstations.db', connect_args={'check_same_thread': False})
+Base.metadata.bind = engine
+
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 app = Flask(__name__)
 
