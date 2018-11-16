@@ -43,8 +43,8 @@ def get_gtfs_and_station_name_from_line(line):
     for row in stations_csv:
         if line in get_line_array_from_lines(row[7]):
             gtfs_id = row[2]
-            station_names = row[5]
-            station_info = [(gtfs_id, station_names)]
+            station_name = row[5]
+            station_info.append((gtfs_id, station_name))
     return station_info
 
 def get_station_name_from_gtfs_id(gtfs_id):
