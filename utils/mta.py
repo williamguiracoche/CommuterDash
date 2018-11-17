@@ -195,6 +195,6 @@ def station_up_down_lookup(train_data, gtfs_id):
 def times_dict_from_gtfs_array(gtfs_ids):
     gtfs_dict = {}
     for gtfs_id in gtfs_ids:
-        gtfs_dict[gtfs_id] = get_times_from_gtfs(gtfs_id)
-        print 'added one'
+        station_name = get_station_name_from_gtfs_id(gtfs_id)
+        gtfs_dict[station_name] = get_times_from_gtfs(gtfs_id)
     return gtfs_dict
