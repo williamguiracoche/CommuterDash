@@ -192,8 +192,9 @@ def main():
         stations = session.query(SavedStation).filter_by(user_id=user_id)
         for station in stations: saved_gtfs_ids.append(station.gtfs_id)
         times_dict = mta.times_dict_from_gtfs_array(saved_gtfs_ids)
-
-    return render_template('main.html', logged_in = logged_in, times_dict = times_dict)
+        return render_template('main.html', logged_in = logged_in, times_dict = times_dict)
+    else:
+        return render_template('public_main.html')
 
 @app.route('/line-select')
 def selectLine():
