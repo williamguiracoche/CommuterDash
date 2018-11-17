@@ -1,6 +1,7 @@
 import yaml
 import dotenv
 import os # imports package for dotenv
+import time # imports module for Epoch/GMT time conversion
 from google.transit import gtfs_realtime_pb2
 import urllib2
 import csv
@@ -26,6 +27,11 @@ def get_stations_csv():
     # Skips the first line in the csv file because it's the header.
     next(stations_csv)
     return stations_csv
+
+def timeUntil(arrival_time):
+    current_time = int(time.time())
+    time_until_train = int(((arrival_time - current_time) / 60))
+    return time_until_train
 
 def get_line_array_from_lines(lines):
     line_array = lines.split()
