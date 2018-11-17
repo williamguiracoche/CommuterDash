@@ -12,7 +12,8 @@
 		<a href="{{url_for('showLogin')}}">Click here to log in!
 		{% endif %}
 		<br>
-		<a href="{{url_for('selectLine')}}">Click here to select your line!</a>
+		<a href="{{url_for('selectLine')}}">Click here to add a new line!</a>
+		<br><br>
 
 		<div class="station_display">
 			{% for key, value in times_dict.iteritems()%}
@@ -24,7 +25,7 @@
 					{% set route = route_time_pair[0]%}
 					{% set time = route_time_pair[1]%}
 
-					{{route}} arrives at {{time}}
+					{{route}} arrives in {{time}} minutes
 					<br>
 				{% endfor %}
 				Downtown Trains:
@@ -33,7 +34,7 @@
 					{% set route = route_time_pair[0]%}
 					{% set time = route_time_pair[1]%}
 
-					{{route}} arrives at {{time}}
+					{{route}} arrives in {{time}} minutes
 					<br>
 				{% endfor %}
 			<br>
