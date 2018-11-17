@@ -56,6 +56,18 @@ def get_station_name_from_gtfs_id(gtfs_id):
             break
     return station_name
 
+def get_line_ids_from_gtfs(gtfs_id):
+    stations_csv = get_stations_csv()
+    line_ids = []
+    for row in stations_csv:
+        if gtfs_id == row[2]:
+            lines = get_line_array_from_lines(row[7])
+    for line in lines:
+        line_id = TRAINS_TO_ID[line]
+        if line_id not in line_ids:
+            line_ids.append(line_id)
+    return line_ids
+
 def get_sorted_times_from_station(direction, station, line):
     stations_csv = get_stations_csv()
     gtfs_id = ''
