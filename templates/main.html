@@ -15,11 +15,29 @@
 		<a href="{{url_for('selectLine')}}">Click here to select your line!</a>
 
 		<div class="station_display">
-			{% for station in stations%}
-				Station GTFS Id you saved =
-				{{station.gtfs_id}}
+			{% for key, value in times_dict.iteritems()%}
+				{{key}} station
 				<br>
-			{% endfor%}
+				Uptown Trains:
+				<br>
+				{% for route_time_pair in value[0] %}
+					{% set route = route_time_pair[0]%}
+					{% set time = route_time_pair[1]%}
+
+					{{route}} arrives at {{time}}
+					<br>
+				{% endfor %}
+				Downtown Trains:
+				<br>
+				{% for route_time_pair in value[1] %}
+					{% set route = route_time_pair[0]%}
+					{% set time = route_time_pair[1]%}
+
+					{{route}} arrives at {{time}}
+					<br>
+				{% endfor %}
+			<br>
+			{% endfor %}
 		</div>
 	</body>
 </html>

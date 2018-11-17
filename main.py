@@ -184,12 +184,16 @@ def gdisconnect():
 @app.route('/')
 def main():
     logged_in = False
-    stations = []
     if 'username' in login_session:
         logged_in = True
         user_id = login_session['user_id']
+
+        saved_gtfs_ids = []
         stations = session.query(SavedStation).filter_by(user_id=user_id)
-    return render_template('main.html', logged_in = logged_in, stations = stations)
+        for station in stations: saved_gtfs_ids.append(station.gtfs_id)
+        times_dict = mta.times_dict_from_gtfs_array(saved_gtfs_ids)
+
+    return render_template('main.html', logged_in = logged_in, times_dict = times_dict)
 
 @app.route('/line-select')
 def selectLine():
