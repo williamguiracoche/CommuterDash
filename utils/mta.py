@@ -131,3 +131,65 @@ def station_time_lookup(train_data, stop):
                         print 'route time added:', route_time
 
     return collected_times
+
+def get_times_from_gtfs(gtfs_id):
+    uptown_times = []
+    downtown_times = []
+    line_ids = get_line_ids_from_gtfs(gtfs_id)
+
+    # Sometimes, a station has multiple train lines going through it.
+    # (For example, Forest Hills - 71 Av has routes E,F,M and R)
+    # This loop goes through each line to get uptown and downtown times
+    # for all stations.
+    for line_id in line_ids:
+        # Requests subway status data feed from City of New York MTA API
+        response = requests.get('http://datamine.mta.info/mta_esi.php?key={}&feed_id={}'.format(api_key,line_id))
+        feed = gtfs_realtime_pb2.FeedMessage()
+        feed.ParseFromString(response.content)
+        subway_feed = protobuf_to_dict(feed) # subway_feed is a dictionary
+        realtime_data = subway_feed['entity'] # train_data is a list
+
+        # Run the above function for the station ID for Broadway-Lafayette
+        times = station_up_down_lookup(realtime_data, gtfs_id)
+        uptown_times.extend(times[0])
+        downtown_times.extend(times[1])
+
+
+    # Sort the collected times list in chronological order (the times from the data
+    # feed are in Epoch time format)
+    uptown_times.sort(key=operator.itemgetter(1))
+    downtown_times.sort(key=operator.itemgetter(1))
+    return uptown_times, downtown_times
+
+# This function takes a converted MTA data feed and a specific station ID and
+# loops through various nested dictionaries and lists to (1) filter out active
+# trains, (2) search for the given station ID, and (3) append the arrival time
+# of any instance of the station ID to the collected_times list
+def station_up_down_lookup(train_data, gtfs_id):
+    uptown_times = []
+    downtown_times = []
+    uptown_stop = gtfs_id + 'N'
+    downtown_stop = gtfs_id + 'S'
+
+    for trains in train_data: # trains are dictionaries
+        if trains.get('trip_update', False) != False:
+            unique_train_schedule = trains['trip_update'] # train_schedule is a dictionary with trip and stop_time_update
+            trip_info = unique_train_schedule['trip'] #trip_info is a list of the train info that going through the stops
+            route_id = trip_info['route_id']
+            unique_arrival_times = unique_train_schedule['stop_time_update'] # arrival_times is a list of arrivals
+            for scheduled_arrivals in unique_arrival_times: #arrivals are dictionaries with time data and stop_ids
+                if scheduled_arrivals.get('stop_id', False) == uptown_stop:
+                    time_data = scheduled_arrivals['arrival']
+                    unique_time = time_data['time']
+                    if unique_time != None:
+                        route_time = (route_id, unique_time)
+                        uptown_times.append(route_time)
+                        print 'Uptown added:', route_time
+                if scheduled_arrivals.get('stop_id', False) == downtown_stop:
+                    time_data = scheduled_arrivals['arrival']
+                    unique_time = time_data['time']
+                    if unique_time != None:
+                        route_time = (route_id, unique_time)
+                        downtown_times.append(route_time)
+                        print 'Downtown added:', route_time
+    return uptown_times, downtown_times
