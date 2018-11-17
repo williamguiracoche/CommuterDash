@@ -184,12 +184,17 @@ def station_up_down_lookup(train_data, gtfs_id):
                     if unique_time != None:
                         route_time = (route_id, unique_time)
                         uptown_times.append(route_time)
-                        print 'Uptown added:', route_time
                 if scheduled_arrivals.get('stop_id', False) == downtown_stop:
                     time_data = scheduled_arrivals['arrival']
                     unique_time = time_data['time']
                     if unique_time != None:
                         route_time = (route_id, unique_time)
                         downtown_times.append(route_time)
-                        print 'Downtown added:', route_time
     return uptown_times, downtown_times
+
+def times_dict_from_gtfs_array(gtfs_ids):
+    gtfs_dict = {}
+    for gtfs_id in gtfs_ids:
+        gtfs_dict[gtfs_id] = get_times_from_gtfs(gtfs_id)
+        print 'added one'
+    return gtfs_dict
