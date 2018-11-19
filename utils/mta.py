@@ -165,6 +165,10 @@ def get_times_from_gtfs(gtfs_id):
     # feed are in Epoch time format)
     uptown_times.sort(key=operator.itemgetter(1))
     downtown_times.sort(key=operator.itemgetter(1))
+
+    # Limit the times stored to 3 per direction
+    uptown_times = uptown_times[:4]
+    downtown_times = downtown_times[:4]
     return uptown_times, downtown_times
 
 # This function takes a converted MTA data feed and a specific station ID and
