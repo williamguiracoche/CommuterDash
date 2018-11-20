@@ -71,7 +71,8 @@
       {% endif %}
       <div class="station_display">
           {% for key, value in times_dict.iteritems()%}
-              <h4>{{key}}</h4>
+              <h4>{{get_name(key)}}</h4>
+              <a href="{{url_for('deleteStation', gtfs_id = key)}}">Remove Station</a>
               <h5>Uptown</h5>
               {% for route_time_pair in value[0] %}
                   {% set route = route_time_pair[0]%}
