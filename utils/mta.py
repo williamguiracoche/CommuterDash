@@ -176,6 +176,7 @@ def get_times_from_gtfs(gtfs_id):
 # trains, (2) search for the given station ID, and (3) append the arrival time
 # of any instance of the station ID to the collected_times list
 def station_up_down_lookup(train_data, gtfs_id):
+    print gtfs_id
     uptown_times = []
     downtown_times = []
     uptown_stop = gtfs_id + 'N'
@@ -189,17 +190,23 @@ def station_up_down_lookup(train_data, gtfs_id):
             unique_arrival_times = unique_train_schedule['stop_time_update'] # arrival_times is a list of arrivals
             for scheduled_arrivals in unique_arrival_times: #arrivals are dictionaries with time data and stop_ids
                 if scheduled_arrivals.get('stop_id', False) == uptown_stop:
-                    time_data = scheduled_arrivals['arrival']
-                    unique_time = timeUntil(time_data['time'])
-                    if unique_time != None and unique_time>0:
-                        route_time = (route_id, unique_time)
-                        uptown_times.append(route_time)
+                    try:
+                        time_data = scheduled_arrivals['arrival']
+                        unique_time = timeUntil(time_data['time'])
+                        if unique_time != None and unique_time>0:
+                            route_time = (route_id, unique_time)
+                            uptown_times.append(route_time)
+                    except KeyError:
+                        pass
                 if scheduled_arrivals.get('stop_id', False) == downtown_stop:
-                    time_data = scheduled_arrivals['arrival']
-                    unique_time = timeUntil(time_data['time'])
-                    if unique_time != None and unique_time>0:
-                        route_time = (route_id, unique_time)
-                        downtown_times.append(route_time)
+                    try:
+                        time_data = scheduled_arrivals['arrival']
+                        unique_time = timeUntil(time_data['time'])
+                        if unique_time != None and unique_time>0:
+                            route_time = (route_id, unique_time)
+                            downtown_times.append(route_time)
+                    except KeyError:
+                        pass
     return uptown_times, downtown_times
 
 def times_dict_from_gtfs_array(gtfs_ids):
