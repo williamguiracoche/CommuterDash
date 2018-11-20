@@ -226,6 +226,23 @@ def selectStation(line):
             session.commit()
         return redirect(url_for('timesDisplay'))
 
+@app.route ('/delete/<gtfs_id>', methods = ['GET','POST'])
+def deleteStation(gtfs_id):
+    print 'HEY IM IN deledStation!'
+    if request.method == 'POST':
+        if 'username' in login_session:
+            user_id = login_session['user_id']
+            itemToDelete = session.query(SavedStation).filter_by(user_id=user_id, gtfs_id=gtfs_id).one()
+            session.delete(itemToDelete)
+            session.commit()
+            return redirect(url_for('main'))
+        else:
+            flash("You cannot delete a station if you are not logged in")
+            redirect(url_for('gconnect'))
+    else:
+        station_name = mta.get_station_name_from_gtfs_id(gtfs_id)
+        return render_template('deleteConfirmation.html', gtfs_id = gtfs_id, get_name =mta.get_station_name_from_gtfs_id)
+
 @app.route('/times-display')
 def timesDisplay():
     global collected_times
