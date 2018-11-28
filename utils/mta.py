@@ -153,7 +153,10 @@ def get_times_from_gtfs(gtfs_id):
         feed = gtfs_realtime_pb2.FeedMessage()
         feed.ParseFromString(response.content)
         subway_feed = protobuf_to_dict(feed) # subway_feed is a dictionary
-        realtime_data = subway_feed['entity'] # train_data is a list
+        try:
+            realtime_data = subway_feed['entity'] # train_data is a list
+        except KeyError:
+            realtime_data = []
 
         # Run the above function for the station ID for Broadway-Lafayette
         times = station_up_down_lookup(realtime_data, gtfs_id)
