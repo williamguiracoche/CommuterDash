@@ -2,7 +2,7 @@ from utils import mta
 
 import time # imports module for Epoch/GMT time conversion
 import os # imports package for dotenv
-import yaml
+import oyaml as yaml
 from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
 from flask import session as login_session
 import random, string
