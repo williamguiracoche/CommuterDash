@@ -1,0 +1,32 @@
+:root{
+    --nyc-blue:#031630;/*#041E42;*/
+    --nyc-orange:#F15524;
+    --sky-blue:#6CACE4;
+    --bkgrnd:#E8E8E8;
+
+}
+
+body{
+    /* padding-top: 20px; */
+    background-color: var(--nyc-blue);
+}
+.container{
+    background-color: var(--bkgrnd);
+
+}
+.arrival_time,.arrival_route {
+    white-space: nowrap;
+    display: inline-block;
+}
+.user-pic, .dashboard-top {
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: bottom;
+}
+.user-pic {
+    padding: 2px;
+}
+.jumbotron {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
