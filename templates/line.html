@@ -7,6 +7,9 @@
 		<a href="{{url_for('selectStation', line=line)}}">
 		<img class="my-1" src="static/svg/{{line.lower()+'.svg'}}" alt='{{line}}' style="width:45px;">
 		</a>
+		{% if line in ['3','6','S', 'E','W','M','L','SIR','G','Z','7']%}
+			<br>
+		{% endif %}
 	</span>
 {% endfor %}
 {% endblock %}
