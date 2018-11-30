@@ -1,19 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head
-	<meta charset="UTF-8">
-	<title>Commuter Dash</title>
-	</head>
-
-	<body>
-		{% if logged_in %}
-		You are logged in!
-		{% else %}
-		<a href="{{url_for('showLogin')}}">Click here to log in!
-		{% endif %}
-		<br>
-		<a href="{{url_for('selectLine')}}">Click here to add a new line!</a>
-		<br><br>
-
-	</body>
-</html>
+{% extends "main.html" %}
+{% block content %}
+{% include "header.html" %}
+<div class="container" style="margin-top:30px">
+	<div class = "public-content text-center">
+		<h3 class="py-3"> To save your stations and view them in your dashboard, please
+		<a href="{{url_for('showLogin')}}"> log in!</a>
+		<h3 class="py-3">
+		<a href="{{url_for('selectLine')}}">Click here to look up your station times!</a>
+		</h3>
+	</div>
+</div>
+{% endblock %}
