@@ -195,7 +195,7 @@ def main():
         times_dict = mta.times_dict_from_gtfs_array(saved_gtfs_ids)
         return render_template('dashboard.html', logged_in = logged_in, user=user, times_dict = times_dict, get_name =mta.get_station_name_from_gtfs_id)
     else:
-        return render_template('public_main.html')
+        return render_template('publicDashboard.html')
 
 @app.route('/line-select')
 def selectLine():
