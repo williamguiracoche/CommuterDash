@@ -171,6 +171,7 @@ def gdisconnect():
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
+    login_session.clear()
     if result['status'] == '200':
         login_session.clear()
         response = make_response(json.dumps('Successfully disconnected.'), 200)
@@ -228,7 +229,6 @@ def selectStation(line):
 
 @app.route ('/delete/<gtfs_id>', methods = ['GET','POST'])
 def deleteStation(gtfs_id):
-    print 'HEY IM IN deledStation!'
     if request.method == 'POST':
         if 'username' in login_session:
             user_id = login_session['user_id']
