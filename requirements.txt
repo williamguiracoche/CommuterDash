@@ -1,3 +1,8 @@
-pyhton
-Flask
-Jinja2
+Flask==1.0.2
+requests>=2.12
+oyaml
+python-dotenv
+gtfs-realtime-bindings
+protobuf3_to_dict
+oauth2client
+sqlalchemy
