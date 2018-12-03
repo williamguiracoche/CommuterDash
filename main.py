@@ -28,7 +28,7 @@ CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_i
 APPLICATION_NAME = "Commuter Dash"
 
 # Connect to Database and create database session
-dotenv.load_dotenv('utils/database_url.env') # loads .env from root directory
+# dotenv.load_dotenv('utils/database_url.env') # loads .env from root directory
 DATABASE_URL = os.environ['DATABASE_URL']
 engine = create_engine(DATABASE_URL)
 Base.metadata.bind = engine

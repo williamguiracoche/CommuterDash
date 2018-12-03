@@ -9,11 +9,12 @@ import requests
 import operator
 from protobuf_to_dict import protobuf_to_dict
 
-dotenv.load_dotenv('utils/api_key.env') # loads .env from root directory
+#dotenv.load_dotenv('utils/api_key.env') # loads .env from root directory
 
 # The root directory requires a .env file with API_KEY assigned/defined within
 # and dotenv installed from pypi. Get API key from http://datamine.mta.info/user
 api_key = os.environ['API_KEY']
+DATABASE_URL = os.environ['DATABASE_URL']
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
 stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
 # Because the data feed includes multiple arrival times for a given station
