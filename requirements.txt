@@ -6,3 +6,4 @@ gtfs-realtime-bindings
 protobuf3_to_dict
 oauth2client
 sqlalchemy
+psycopg2
