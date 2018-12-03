@@ -14,6 +14,7 @@ import httplib2
 import json
 from flask import make_response
 import requests
+import dotenv
 
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
@@ -27,7 +28,9 @@ CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_i
 APPLICATION_NAME = "Commuter Dash"
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///savedstations.db', connect_args={'check_same_thread': False})
+dotenv.load_dotenv('utils/database_url.env') # loads .env from root directory
+DATABASE_URL = os.environ['DATABASE_URL']
+engine = create_engine(DATABASE_URL)
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -299,4 +302,4 @@ def timesDisplay():
 if __name__ == '__main__':
     app.secret_key = 'temporary_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='127.0.0.1', port=5000)
