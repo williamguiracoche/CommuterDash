@@ -2,6 +2,10 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
+import dotenv
+
+dotenv.load_dotenv('utils/database_url.env') # loads .env from root directory
+DATABASE_URL = os.environ['DATABASE_URL']
 
 Base = declarative_base()
 
@@ -32,5 +36,5 @@ class SavedStation(Base):
             'order': self.order,
         }
 
-engine = create_engine('sqlite:///savedstations.db')
+engine = create_engine(DATABASE_URL)
 Base.metadata.create_all(engine)
