@@ -24,7 +24,7 @@ app = Flask(__name__)
 
 collected_times = []
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+CLIENT_ID = os.environ['CLIENT_SECRETS']['web']['client_id']
 APPLICATION_NAME = "Commuter Dash"
 
 # Connect to Database and create database session
