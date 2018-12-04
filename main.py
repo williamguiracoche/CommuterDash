@@ -21,7 +21,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, SavedStation
 
 app = Flask(__name__)
-app.secret_key = 'temporary_secret_key'
+app.secret_key = os.urandom(24)
 
 collected_times = []
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
