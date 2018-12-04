@@ -304,6 +304,5 @@ def timesDisplay():
     return output
 
 if __name__ == '__main__':
-    app.secret_key = 'temporary_secret_key'
     app.debug = True
     app.run()
