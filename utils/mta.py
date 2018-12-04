@@ -16,7 +16,7 @@ from protobuf_to_dict import protobuf_to_dict
 api_key = os.environ['API_KEY']
 DATABASE_URL = os.environ['DATABASE_URL']
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
-stations_url = 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
+stations_url = urllib2.Request('http://web.mta.info/developers/data/nyct/subway/Stations.csv') 
 # Because the data feed includes multiple arrival times for a given station
 # a global list needs to be created to collect the various times
 collected_times = []
