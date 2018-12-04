@@ -25,7 +25,10 @@ app.secret_key = 'temporary_secret_key'
 
 collected_times = []
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
-CLIENT_ID = json.loads(os.environ['CLIENT_SECRETS'])['web']['client_id']
+try:
+    CLIENT_ID = json.loads(os.environ['CLIENT_SECRETS'])['web']['client_id']
+except KeyError:
+    CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Commuter Dash"
 
 # Connect to Database and create database session

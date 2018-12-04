@@ -13,10 +13,18 @@ from protobuf_to_dict import protobuf_to_dict
 
 # The root directory requires a .env file with API_KEY assigned/defined within
 # and dotenv installed from pypi. Get API key from http://datamine.mta.info/user
-api_key = os.environ['API_KEY']
-DATABASE_URL = os.environ['DATABASE_URL']
+try:
+    api_key = os.environ['API_KEY']
+except KeyError:
+    dotenv.load_dotenv('utils/api_key.env')
+    api_key = os.environ['API_KEY']
+try:
+    DATABASE_URL = os.environ['DATABASE_URL']
+except KeyError:
+    dotenv.load_dotenv('utils/database_url.env')
+    DATABASE_URL = os.environ['DATABASE_URL']
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
-stations_url = urllib2.Request('http://web.mta.info/developers/data/nyct/subway/Stations.csv') 
+stations_url = urllib2.Request('http://web.mta.info/developers/data/nyct/subway/Stations.csv')
 # Because the data feed includes multiple arrival times for a given station
 # a global list needs to be created to collect the various times
 collected_times = []
