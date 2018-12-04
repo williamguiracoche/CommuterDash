@@ -21,6 +21,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, SavedStation
 
 app = Flask(__name__)
+app.secret_key = 'temporary_secret_key'
 
 collected_times = []
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
@@ -300,6 +301,5 @@ def timesDisplay():
     return output
 
 if __name__ == '__main__':
-    app.secret_key = 'temporary_secret_key'
     app.debug = True
     app.run()
