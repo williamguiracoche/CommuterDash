@@ -24,7 +24,11 @@ except KeyError:
     dotenv.load_dotenv('utils/database_url.env')
     DATABASE_URL = os.environ['DATABASE_URL']
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
-stations_url = urllib2.Request('http://web.mta.info/developers/data/nyct/subway/Stations.csv')
+
+site= 'http://web.mta.info/developers/data/nyct/subway/Stations.csv'
+hdr = {'User-Agent': 'Mozilla/5.0'}
+stations_url = urllib2.Request(site,headers=hdr)
+
 # Because the data feed includes multiple arrival times for a given station
 # a global list needs to be created to collect the various times
 collected_times = []
