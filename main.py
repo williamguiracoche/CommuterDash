@@ -21,6 +21,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, SavedStation
 
 app = Flask(__name__)
+app.secret_key = '_5#y2L"F4Q8zn+xec]/'
 
 collected_times = []
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
@@ -38,8 +39,6 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
-
-app = Flask(__name__)
 
 def timeUntil(arrival_time):
     current_time = int(time.time())
@@ -302,10 +301,6 @@ def timesDisplay():
         print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(first_time))
     return output
 
-print "I AM OUT OF BLOCK" 
 if __name__ == '__main__':
-    app.secret_key = '_5#y2L"F4Q8zn+xec]/'
-    sess.init_app(app)
-    print "I AM IN IF BLOCK"
     app.debug = True
     app.run()
