@@ -35,7 +35,10 @@ collected_times = []
 
 def get_stations_csv():
     # CSV file reader
-    stations_response = urllib2.urlopen(stations_url)
+    try:
+        stations_response = urllib2.urlopen(stations_url)
+    except HTTPError:
+        stations_response = open('utils/stations.csv')
     stations_csv = csv.reader(stations_response)
     # Skips the first line in the csv file because it's the header.
     next(stations_csv)
