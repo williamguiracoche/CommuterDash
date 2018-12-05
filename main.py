@@ -10,6 +10,7 @@ from protobuf_to_dict import protobuf_to_dict
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from oauth2client.clientsecrets import InvalidClientSecretsError
 import httplib2
 import json
 from flask import make_response
