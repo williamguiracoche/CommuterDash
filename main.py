@@ -234,7 +234,7 @@ def selectStation(line):
             flash('Hey %s, we have added %s station to your favorites!' % (username, station_name))
             print('Hey %s, we have added %s station to your favorites!' % (username, station_name))
             session.commit()
-        return redirect(url_for('timesDisplay'))
+        return redirect(url_for('main'))
 
 @app.route ('/delete/<gtfs_id>', methods = ['GET','POST'])
 def deleteStation(gtfs_id):
