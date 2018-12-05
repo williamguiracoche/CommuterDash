@@ -17,7 +17,7 @@ from flask import make_response
 import requests
 import dotenv
 
-from sqlalchemy import create_engine, asc
+from sqlalchemy import create_engine, asc, exists, and_
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, SavedStation
 
@@ -142,7 +142,7 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
-    flash("you are now logged in as %s" % login_session['username'])
+    flash("You are logged in as %s" % login_session['username'])
     print "done!"
     return output
 
@@ -223,18 +223,26 @@ def selectStation(line):
         gtfs_id = request.form['gtfs_id']
         station_name = mta.get_station_name_from_gtfs_id(gtfs_id)
         print station_name
-        collected_times = mta.get_sorted_times_from_station(direction, station_name, line)
 
         if 'username' in login_session:
             username = login_session['username']
             user_id = login_session['user_id']
             print user_id
-            newStation = SavedStation(gtfs_id = gtfs_id, user_id=login_session['user_id'])
-            session.add(newStation)
-            flash('Hey %s, we have added %s station to your favorites!' % (username, station_name))
-            print('Hey %s, we have added %s station to your favorites!' % (username, station_name))
-            session.commit()
-        return redirect(url_for('main'))
+
+            if session.query(exists().where(and_(
+                SavedStation.gtfs_id == gtfs_id,
+                SavedStation.user_id == user_id))
+            ).scalar():
+                flash('%s is already in favorites' % station_name)
+            else:
+                newStation = SavedStation(gtfs_id = gtfs_id, user_id=login_session['user_id'])
+                session.add(newStation)
+                flash('Hey %s, we have added %s station to your favorites!' % (username, station_name))
+                session.commit()
+            return redirect(url_for('main'))
+            
+        collected_times = mta.get_sorted_times_from_station(direction, station_name, line)
+        return redirect(url_for('timesDisplay'))
 
 @app.route ('/delete/<gtfs_id>', methods = ['GET','POST'])
 def deleteStation(gtfs_id):
