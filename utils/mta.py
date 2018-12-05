@@ -4,6 +4,7 @@ import os # imports package for dotenv
 import time # imports module for Epoch/GMT time conversion
 from google.transit import gtfs_realtime_pb2
 import urllib2
+from urllib2 import HTTPError
 import csv
 import requests
 import operator
@@ -37,7 +38,7 @@ def get_stations_csv():
     # CSV file reader
     try:
         stations_response = urllib2.urlopen(stations_url)
-    except HTTPError:
+    except urllib2.HTTPError:
         stations_response = open('utils/stations.csv')
     stations_csv = csv.reader(stations_response)
     # Skips the first line in the csv file because it's the header.
