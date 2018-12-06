@@ -254,6 +254,7 @@ def deleteStation(gtfs_id):
             itemToDelete = session.query(SavedStation).filter_by(user_id=user_id, gtfs_id=gtfs_id).one()
             session.delete(itemToDelete)
             session.commit()
+            flash('Station removed')
             return redirect(url_for('main'))
         else:
             flash("You cannot delete a station if you are not logged in")
