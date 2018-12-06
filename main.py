@@ -27,7 +27,7 @@ try:
 except KeyError:
     app.secret_key = '_5#y2L"F4Q8zn+xec]/'
 
-collected_times = []
+lookup_gtfs=''
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
 try:
     CLIENT_ID = json.loads(os.environ['CLIENT_SECRETS'])['web']['client_id']
@@ -218,7 +218,7 @@ def selectLine():
 
 @app.route('/<line>/station-select', methods = ['GET','POST'])
 def selectStation(line):
-    global collected_times
+    global lookup_gtfs
     if request.method == 'GET':
         gtfs_and_names = mta.get_gtfs_and_station_name_from_line(line)
         return render_template('stationSelect.html', gtfs_and_names= gtfs_and_names)
@@ -246,7 +246,7 @@ def selectStation(line):
                 session.commit()
             return redirect(url_for('main'))
 
-        collected_times = mta.get_sorted_times_from_station(direction, station_name, line)
+        lookup_gtfs = gtfs_id
         return redirect(url_for('timesDisplay'))
 
 @app.route ('/delete/<gtfs_id>', methods = ['GET','POST'])
@@ -269,55 +269,9 @@ def deleteStation(gtfs_id):
 @app.route('/times-display')
 def timesDisplay():
     global collected_times
-
-    print '[display]: collected_times master list'
-    print collected_times
-    # Pop off the earliest  arrival times from the list
-    first_arrival_time_data = collected_times[0]
-    second_arrival_time_data = collected_times[1]
-    third_arrival_time_data = collected_times[2]
-
-    first_line = first_arrival_time_data[0]
-    first_time = first_arrival_time_data[1]
-    second_line = second_arrival_time_data[0]
-    second_time = second_arrival_time_data[1]
-    third_line = third_arrival_time_data[0]
-    third_time = third_arrival_time_data[1]
-
-    time_until_first = timeUntil(first_time)
-    time_until_second = timeUntil(second_time)
-    time_until_third = timeUntil(third_time)
-
-    print collected_times
-
-    print first_line
-    print time_until_first
-
-    print second_line
-    print time_until_second
-
-    print third_line
-    print time_until_third
-
-    output = ''
-    output += '%s train arriving in %d minutes<br>' % (first_line, time_until_first)
-    output += '%s train arriving in %d minutes<br>' % (second_line, time_until_second)
-    output += '%s train arriving in %d minutes<br>' % (third_line, time_until_third)
-
-    # This final part of the code checks the time to arrival and prints a few
-    # different messages depending on the circumstance
-
-    if time_until_first > 3:
-        print "Current time: "+time.strftime("%I:%M %p")
-        print "Minutes to next: "+str(time_until_first)
-        print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(first_time))
-    elif time_until_first <= 0:
-        print "Missed it. Minutes to next: "+str(time_until_first)
-        print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(second_time))
-    else:
-        print "You have "+str(time_until_first)+" minutes to get home."
-        print "Arrival time: "+time.strftime("%I:%M %p", time.localtime(first_time))
-    return output
+    logged_in = False
+    times_dict = mta.times_dict_from_gtfs_array([lookup_gtfs])
+    return render_template('dashboard.html', logged_in = logged_in, times_dict = times_dict, get_name =mta.get_station_name_from_gtfs_id)
 
 if __name__ == '__main__':
     app.debug = True

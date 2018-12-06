@@ -54,7 +54,7 @@ def get_line_array_from_lines(lines):
     line_array = lines.split()
     return line_array
 
-# Delete this if you replace it with get_station_name_and_gtfs_from_line()
+# Delete this if you replace it with get_gtfs_and_station_name_from_line()
 def get_station_names_from_line(line):
     stations_csv = get_stations_csv()
     station_names = [row[5] for row in stations_csv if line in get_line_array_from_lines(row[7])]

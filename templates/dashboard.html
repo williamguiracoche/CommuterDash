@@ -12,12 +12,17 @@
       </div>
       <a href="{{url_for('selectLine')}}">Add a new line!</a>
       {% else %}
-      <a href="{{url_for('showLogin')}}">Click here to log in!
+      To save a station to your favorties, you must <a href="{{url_for('showLogin')}}">login</a>.
+      <br>
+      <a href="{{url_for('selectLine')}}">Look up station times</a>
       {% endif %}
       <div class="station_display">
           {% for key, value in times_dict.iteritems()%}
               <h4>{{get_name(key)}}</h4>
-              <a href="{{url_for('deleteStation', gtfs_id = key)}}">Remove Station</a>
+              {% if logged_in %}
+                <a href="{{url_for('deleteStation', gtfs_id = key)}}">Remove Station</a>
+              {% endif %}
+
               <h5>Uptown</h5>
               {% for route_time_pair in value[0] %}
                   {% set route = route_time_pair[0]%}
