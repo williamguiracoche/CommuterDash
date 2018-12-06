@@ -176,7 +176,8 @@ def gdisconnect():
         response = make_response(
             json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        flash('Current user is logged out')
+        return redirect(url_for('main'))
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
@@ -185,7 +186,8 @@ def gdisconnect():
         login_session.clear()
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        flash('Successfully disconnected')
+        return redirect(url_for('main'))
     else:
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
@@ -240,7 +242,7 @@ def selectStation(line):
                 flash('Hey %s, we have added %s station to your favorites!' % (username, station_name))
                 session.commit()
             return redirect(url_for('main'))
-            
+
         collected_times = mta.get_sorted_times_from_station(direction, station_name, line)
         return redirect(url_for('timesDisplay'))
 
