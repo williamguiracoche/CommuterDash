@@ -22,7 +22,10 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, SavedStation
 
 app = Flask(__name__)
-app.secret_key = '_5#y2L"F4Q8zn+xec]/'
+try:
+    app.secret_key = os.environ['SECRET_KEY']
+except KeyError:
+    app.secret_key = '_5#y2L"F4Q8zn+xec]/'
 
 collected_times = []
 TRAINS_TO_ID = yaml.load(open('trains_to_id.yaml'))
