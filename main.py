@@ -221,7 +221,7 @@ def selectStation(line):
     global lookup_gtfs
     if request.method == 'GET':
         gtfs_and_names = mta.get_gtfs_and_station_name_from_line(line)
-        return render_template('stationSelect.html', gtfs_and_names= gtfs_and_names)
+        return render_template('stationSelect.html', gtfs_and_names= gtfs_and_names, line=line)
 
     elif request.method == 'POST':
         gtfs_id = request.form['gtfs_id']
