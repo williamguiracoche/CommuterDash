@@ -3,18 +3,6 @@
 {% include "header.html" %}
 
 <form action="#" method = "post">
-    <div class='direction-select py-3'>
-        <h4> Choose direction:</h4>
-        <div class="btn-group btn-group-toggle " data-toggle="buttons">
-          <label class="btn btn-outline-primary active">
-            <input type="radio" name="direction" value='uptown' autocomplete="off" checked> Uptown
-          </label>
-          <label class="btn btn-outline-primary">
-            <input type="radio" name="direction" value='downtown' autocomplete="off"> Downtown
-          </label>
-        </div>
-    </div>
-
     <div class='station-select'>
         Choose Station:
 		{% for gtfs_and_name in gtfs_and_names %}

@@ -224,7 +224,6 @@ def selectStation(line):
         return render_template('stationSelect.html', gtfs_and_names= gtfs_and_names)
 
     elif request.method == 'POST':
-        direction = request.form['direction']
         gtfs_id = request.form['gtfs_id']
         station_name = mta.get_station_name_from_gtfs_id(gtfs_id)
         print station_name
