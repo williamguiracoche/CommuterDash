@@ -16,15 +16,17 @@
       <br>
       <a href="{{url_for('selectLine')}}">Look up station times</a>
       {% endif %}
-      <div class="station_display">
-          {% for key, value in times_dict.iteritems()%}
-              <h4>{{get_name(key)}}</h4>
+      <div class="all_stations_display">
+          {% for gtfs_id in gtfs_ids%}
+            <div class="station_display">
+              <h4>{{get_name(gtfs_id)}}</h4>
               {% if logged_in %}
-                <a href="{{url_for('deleteStation', gtfs_id = key)}}">Remove Station</a>
+                <a href="{{url_for('deleteStation', gtfs_id = gtfs_id)}}">Remove Station</a>
               {% endif %}
+              {% set all_data = get_times(gtfs_id)%}
 
               <h5>Uptown</h5>
-              {% for route_time_pair in value[0] %}
+              {% for route_time_pair in all_data[0] %}
                   {% set route = route_time_pair[0]%}
                   {% set time = route_time_pair[1] %}
                       <div class ="route-time-set">
@@ -33,7 +35,7 @@
                       </div>
               {% endfor %}
               <h5>Downtown</h5>
-              {% for route_time_pair in value[1] %}
+              {% for route_time_pair in all_data[1] %}
                   {% set route = route_time_pair[0]%}
                   {% set time = route_time_pair[1]%}
                   <div class ="route-time-set">
@@ -41,6 +43,7 @@
                       <p class="arrival_time">{{time}} minutes</p>
                   </div>
               {% endfor %}
+          </div>
           {% endfor %}
       </div>
     </div>

@@ -207,8 +207,7 @@ def main():
         user = session.query(User).filter_by(id=user_id).one()
         stations = session.query(SavedStation).filter_by(user_id=user_id)
         for station in stations: saved_gtfs_ids.append(station.gtfs_id)
-        times_dict = mta.times_dict_from_gtfs_array(saved_gtfs_ids)
-        return render_template('dashboard.html', logged_in = logged_in, user=user, times_dict = times_dict, get_name =mta.get_station_name_from_gtfs_id)
+        return render_template('dashboard.html', logged_in = logged_in, user=user, gtfs_ids=saved_gtfs_ids, get_name =mta.get_station_name_from_gtfs_id, get_times =mta.get_times_from_gtfs)
     else:
         return render_template('publicDashboard.html')
 
@@ -267,10 +266,10 @@ def deleteStation(gtfs_id):
 
 @app.route('/times-display')
 def timesDisplay():
-    global collected_times
+    global lookup_gtfs
     logged_in = False
     times_dict = mta.times_dict_from_gtfs_array([lookup_gtfs])
-    return render_template('dashboard.html', logged_in = logged_in, times_dict = times_dict, get_name =mta.get_station_name_from_gtfs_id)
+    return render_template('dashboard.html', logged_in = logged_in, gtfs_ids=[lookup_gtfs], get_name =mta.get_station_name_from_gtfs_id, get_times =mta.get_times_from_gtfs)
 
 if __name__ == '__main__':
     app.debug = True
