@@ -25,24 +25,29 @@
               {% endif %}
               {% set all_data = get_times(gtfs_id)%}
 
-              <h5>Uptown</h5>
-              {% for route_time_pair in all_data[0] %}
-                  {% set route = route_time_pair[0]%}
-                  {% set time = route_time_pair[1] %}
+              {% if all_data[0]==[] and all_data[1]==[] %}
+                  <h5> No data available for the station at this time <h5>
+              {% else %}
+                  <h5>Uptown</h5>
+                  {% for route_time_pair in all_data[0] %}
+                      {% set route = route_time_pair[0]%}
+                      {% set time = route_time_pair[1] %}
+                          <div class ="route-time-set">
+                              <img class ="arrival_route" src="static/svg/{{route.lower()+'.svg'}}" alt='{{route}}' style="width:20px;">
+                              <p class="arrival_time">{{time}} minutes</p>
+                          </div>
+                  {% endfor %}
+                  <h5>Downtown</h5>
+                  {% for route_time_pair in all_data[1] %}
+                      {% set route = route_time_pair[0]%}
+                      {% set time = route_time_pair[1]%}
                       <div class ="route-time-set">
                           <img class ="arrival_route" src="static/svg/{{route.lower()+'.svg'}}" alt='{{route}}' style="width:20px;">
                           <p class="arrival_time">{{time}} minutes</p>
                       </div>
-              {% endfor %}
-              <h5>Downtown</h5>
-              {% for route_time_pair in all_data[1] %}
-                  {% set route = route_time_pair[0]%}
-                  {% set time = route_time_pair[1]%}
-                  <div class ="route-time-set">
-                      <img class ="arrival_route" src="static/svg/{{route.lower()+'.svg'}}" alt='{{route}}' style="width:20px;">
-                      <p class="arrival_time">{{time}} minutes</p>
-                  </div>
-              {% endfor %}
+                  {% endfor %}
+            {% endif %}
+
           </div>
           {% endfor %}
       </div>
