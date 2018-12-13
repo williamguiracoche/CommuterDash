@@ -225,12 +225,12 @@ def selectStation(line):
     elif request.method == 'POST':
         gtfs_id = request.form['gtfs_id']
         station_name = mta.get_station_name_from_gtfs_id(gtfs_id)
-        print station_name
+        # print station_name
 
         if 'username' in login_session:
             username = login_session['username']
             user_id = login_session['user_id']
-            print user_id
+            # print user_id
 
             if session.query(exists().where(and_(
                 SavedStation.gtfs_id == gtfs_id,
