@@ -3,3 +3,4 @@ scratch.py
 *.pyc
 client_secrets.json
 *.db
+fb_client_secrets.json
